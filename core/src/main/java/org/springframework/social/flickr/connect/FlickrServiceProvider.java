@@ -18,20 +18,22 @@ package org.springframework.social.flickr.connect;
 import org.springframework.social.flickr.api.Flickr;
 import org.springframework.social.flickr.api.impl.FlickrTemplate;
 import org.springframework.social.oauth1.AbstractOAuth1ServiceProvider;
-import org.springframework.social.oauth1.OAuth1Template;
 
-public class FlickrServiceProvider extends AbstractOAuth1ServiceProvider<Flickr> {
+public class FlickrServiceProvider extends
+		AbstractOAuth1ServiceProvider<Flickr> {
+	private final String consumerKey, consumerSecret;
 
 	public FlickrServiceProvider(String consumerKey, String consumerSecret) {
-		super(consumerKey, consumerSecret, new OAuth1Template(consumerKey, consumerSecret,
-			"http://www.flickr.com/services/oauth/request_token",
-			"http://www.flickr.com/services/oauth/authorize",
-			"http://www.flickr.com/services/oauth/authenticate",			
-			"http://www.flickr.com/services/oauth/access_token"));
+		super(consumerKey, consumerSecret, new FlickrOAuth1Template(
+				consumerKey, consumerSecret));
+		this.consumerKey = consumerKey;
+		this.consumerSecret = consumerSecret;
 	}
 
+	@Override
 	public Flickr getApi(String accessToken, String secret) {
-		return new FlickrTemplate(getConsumerKey(), getConsumerSecret(), accessToken, secret);
+		return new FlickrTemplate(consumerKey, consumerSecret, accessToken,
+				secret);
 	}
-	
+
 }

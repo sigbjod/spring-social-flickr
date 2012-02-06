@@ -14,27 +14,32 @@ import org.springframework.web.servlet.mvc.AbstractController;
 
 public class FlickrController extends AbstractController {
 	private String message;
-	
+
 	@Override
 	protected ModelAndView handleRequestInternal(HttpServletRequest arg0,
 			HttpServletResponse arg1) throws Exception {
 		String consumerKey = "consumerKey";
-		String  consumerSecret= "consumerSecret";
-		FlickrConnectionFactory flickrConnectionFactory = new FlickrConnectionFactory(consumerKey, consumerSecret);
-		OAuth1Operations oauthOperations = flickrConnectionFactory.getOAuthOperations();
+		String consumerSecret = "consumerSecret";
+		FlickrConnectionFactory flickrConnectionFactory = new FlickrConnectionFactory(
+				consumerKey, consumerSecret);
+		OAuth1Operations oauthOperations = flickrConnectionFactory
+				.getOAuthOperations();
 		String callbackUrl = "http://localhost:8080/spring-social-flickr-web/hello.jsp";
-		OAuthToken fetchRequestToken = oauthOperations.fetchRequestToken(callbackUrl, null);
-		Flickr flickr = new FlickrTemplate(consumerKey, consumerSecret, fetchRequestToken.getValue(), fetchRequestToken.getSecret());
-		FlickrProfile userProfile =null;
-		try{
-			userProfile = flickr.getUserProfile();
-		}catch(Exception e){
+		OAuthToken fetchRequestToken = oauthOperations.fetchRequestToken(
+				callbackUrl, null);
+		Flickr flickr = new FlickrTemplate(consumerKey, consumerSecret,
+				fetchRequestToken.getValue(), fetchRequestToken.getSecret());
+		FlickrProfile userProfile = null;
+		try {
+			userProfile = flickr.peopleOperations().getInfo("testuser");
+		} catch (Exception e) {
 			System.out.println(e.toString());
 		}
-		System.out.println(userProfile.getStat());
-		
+		System.out.println(userProfile);
+
 		return new ModelAndView("welcomePage", "welcomeMessage", message);
 	}
+
 	public void setMessage(String message) {
 		this.message = message;
 	}

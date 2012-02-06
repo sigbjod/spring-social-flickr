@@ -1,0 +1,41 @@
+10
+
+dir
+2260
+svn+ssh://svn.travellution.com/var/svn/travellution/trunk/travellution-core/src/main/java/org/springframework/social/flickr/api/helper
+svn+ssh://svn.travellution.com/var/svn/travellution
+
+
+
+2012-02-06T17:02:31.676576Z
+2260
+sdybdahl
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+73f87dd8-57ed-4c22-9368-5637092212ad
+
+
+
+
+
+
+0
+
+parameter
+dir
+
+structure
+dir
+

@@ -22,28 +22,63 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
 import org.springframework.social.flickr.api.Flickr;
-import org.springframework.social.flickr.api.FlickrProfile;
+import org.springframework.social.flickr.api.GalleriesOperations;
+import org.springframework.social.flickr.api.PeopleOperations;
+import org.springframework.social.flickr.api.PhotosOperations;
+import org.springframework.social.flickr.api.PhotosetsOperations;
+import org.springframework.social.flickr.api.TestOperations;
+import org.springframework.social.flickr.api.impl.json.FlickrModule;
 import org.springframework.social.oauth1.AbstractOAuth1ApiBinding;
+import org.springframework.social.support.ClientHttpRequestFactorySelector;
+import org.springframework.web.client.RestTemplate;
 
 public class FlickrTemplate extends AbstractOAuth1ApiBinding implements Flickr {
-    private String URL_TO_ACCESS_PROFILE = "http://api.flickr.com/services/rest/?method=flickr.people.findByUsername&username=hemantsch&format=json&nojsoncallback=1";
-    
-    
+	private GalleriesOperations galleriesOperations;
+	private PeopleOperations peopleOperations;
+	private PhotosetsOperations photosetsOperations;
+	private PhotosOperations photosOperations;
+	private TestOperations testOperations;
 
-    public FlickrTemplate(String consumerKey, String consumerSecret, String accessToken, String accessTokenSecret) {
-    	super(consumerKey, consumerSecret, accessToken, accessTokenSecret);
-    }
+	public FlickrTemplate(String consumerKey, String consumerSecret,
+			String accessToken, String accessTokenSecret) {
+		super(consumerKey, consumerSecret, accessToken, accessTokenSecret);
+		initialize();
+	}
 
-    @Override
-    public FlickrProfile getUserProfile() {
-    System.out.println("And the url is :  " + URL_TO_ACCESS_PROFILE);
-	FlickrProfile flickrProfile = getRestTemplate().getForObject(URL_TO_ACCESS_PROFILE, FlickrProfile.class);
-	return flickrProfile;
-    }
+	@Override
+	public GalleriesOperations galleriesOperations() {
+		return galleriesOperations;
+	}
 
-    @Override
-    protected MappingJacksonHttpMessageConverter getJsonMessageConverter() {
-		MappingJacksonHttpMessageConverter converter = super.getJsonMessageConverter();
+	@Override
+	public PeopleOperations peopleOperations() {
+		return peopleOperations;
+	}
+
+	@Override
+	public PhotosetsOperations photosetsOperations() {
+		return photosetsOperations;
+	}
+
+	@Override
+	public PhotosOperations photosOperations() {
+		return photosOperations;
+	}
+
+	@Override
+	public TestOperations testOperations() {
+		return testOperations;
+	}
+
+	@Override
+	protected void configureRestTemplate(RestTemplate restTemplate) {
+		restTemplate.setErrorHandler(new FlickrErrorHandler());
+	}
+
+	@Override
+	protected MappingJacksonHttpMessageConverter getJsonMessageConverter() {
+		MappingJacksonHttpMessageConverter converter = super
+				.getJsonMessageConverter();
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.registerModule(new FlickrModule());
 		List<MediaType> supportedMediaTypes = new ArrayList<MediaType>();
@@ -53,5 +88,21 @@ public class FlickrTemplate extends AbstractOAuth1ApiBinding implements Flickr {
 		converter.setSupportedMediaTypes(supportedMediaTypes);
 		converter.setObjectMapper(objectMapper);
 		return converter;
-    }
+	}
+
+	// private helpers
+	private void initialize() {
+		// Wrap the request factory with a BufferingClientHttpRequestFactory so that the error handler can do repeat reads on the response.getBody()
+		super.setRequestFactory(ClientHttpRequestFactorySelector
+				.bufferRequests(getRestTemplate().getRequestFactory()));
+		initSubApis();
+	}
+
+	private void initSubApis() {
+		this.galleriesOperations = new GalleriesTemplate(this, isAuthorized());
+		this.peopleOperations = new PeopleTemplate(this, isAuthorized());
+		this.photosetsOperations = new PhotosetsTemplate(this, isAuthorized());
+		this.photosOperations = new PhotosTemplate(this, isAuthorized());
+		this.testOperations = new TestTemplate(this, isAuthorized());
+	}
 }

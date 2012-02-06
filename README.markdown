@@ -1,4 +1,8 @@
 Spring Social Flickr
 ======
 
->> This project is under development. Do not use it in your applications.
+As mentioned by rajan-rk, this projet is under development.
+The following basic implementation for the following verbs is present:
+- people
+- photosets
+- photos

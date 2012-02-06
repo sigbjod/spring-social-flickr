@@ -18,34 +18,44 @@ package org.springframework.social.flickr.connect;
 import org.springframework.social.connect.ApiAdapter;
 import org.springframework.social.connect.ConnectionValues;
 import org.springframework.social.connect.UserProfile;
+import org.springframework.social.connect.UserProfileBuilder;
 import org.springframework.social.flickr.api.Flickr;
+import org.springframework.social.flickr.api.FlickrProfile;
 import org.springframework.web.client.HttpClientErrorException;
 
 public class FlickrAdapter implements ApiAdapter<Flickr> {
 
-    public boolean test(Flickr flickr) {
-	try {
-	    flickr.getUserProfile();
-	    return true;
-	} catch (HttpClientErrorException e) {
-	    e.printStackTrace();
-	    return false;
+	@Override
+	public boolean test(Flickr flickr) {
+		try {
+			flickr.testOperations().login();
+			return true;
+		} catch (HttpClientErrorException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
-    }
 
-    @Override
-    public UserProfile fetchUserProfile(Flickr api) {
-    	System.out.println("TODO : Implement fetchUserProfile");
-	return null;
-    }
+	@Override
+	public void setConnectionValues(Flickr flickr, ConnectionValues values) {
+		FlickrProfile profile = flickr.peopleOperations().getInfo("test");
+		values.setProviderUserId(profile.getNsid());
+		values.setDisplayName(profile.getRealname().get_content());
+		// TODO Set this later on
+		// values.setImageUrl(null);
+	}
 
-    @Override
-    public void setConnectionValues(Flickr api, ConnectionValues values) {
-	// TODO Auto-generated method stub
+	@Override
+	public UserProfile fetchUserProfile(Flickr flickr) {
+		FlickrProfile user = flickr.peopleOperations().getInfo("test");
+		return new UserProfileBuilder().setName(
+				user.getRealname().get_content()).setUsername(
+				user.getUsername().get_content()).build();
+	}
 
-    }
+	@Override
+	public void updateStatus(Flickr flickr, String message) {
+		throw new UnsupportedOperationException();
+	}
 
-    public void updateStatus(Flickr flickr, String message) {
-	throw new UnsupportedOperationException();
-    }
 }

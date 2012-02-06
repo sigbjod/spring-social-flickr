@@ -15,10 +15,16 @@
  */
 package org.springframework.social.flickr.api;
 
-import org.springframework.social.ApiBinding;
+public interface Flickr {
 
-public interface Flickr extends ApiBinding{
+	GalleriesOperations galleriesOperations();
 
-    FlickrProfile getUserProfile();
+	PeopleOperations peopleOperations();
+
+	PhotosetsOperations photosetsOperations();
+
+	PhotosOperations photosOperations();
+
+	TestOperations testOperations();
 
 }

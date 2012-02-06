@@ -15,48 +15,164 @@
  */
 package org.springframework.social.flickr.api;
 
-public class FlickrProfile {
+import org.springframework.social.flickr.api.helper.parameter.HelperStringParameter;
+import org.springframework.social.flickr.api.helper.structure.HelperProfilePhotos;
 
-	public static class User {
-		private String nsid;
-		private String id;
+public class FlickrProfile extends FlickrUser {
+	private Integer ispro, iconserver, iconfarm;
+	private HelperStringParameter realname, mbox_sha1sum, location, photosurl,
+			profileurl;
+	private HelperProfilePhotos photos;
 
-		public String getId() {
-			return id;
-		}
-
-		public void setId(String id) {
-			this.id = id;
-		}
-
-		public String getNsid() {
-			return nsid;
-		}
-
-		public void setNsid(String nsid) {
-			this.nsid = nsid;
-		}
-
-		
+	/**
+	 * @return the ispro
+	 */
+	@Override
+	public Integer getIspro() {
+		return ispro;
 	}
 
-	private String stat;
-	
-	private User user; 
-
-	public User getUser() {
-		return user;
+	/**
+	 * @param ispro
+	 *            the ispro to set
+	 */
+	@Override
+	public void setIspro(Integer ispro) {
+		this.ispro = ispro;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	/**
+	 * @return the iconserver
+	 */
+	public Integer getIconserver() {
+		return iconserver;
 	}
 
-	public String getStat() {
-		return stat;
+	/**
+	 * @param iconserver
+	 *            the iconserver to set
+	 */
+	public void setIconserver(Integer iconserver) {
+		this.iconserver = iconserver;
 	}
 
-	public void setStat(String stat) {
-		this.stat = stat;
+	/**
+	 * @return the iconfarm
+	 */
+	public Integer getIconfarm() {
+		return iconfarm;
+	}
+
+	/**
+	 * @param iconfarm
+	 *            the iconfarm to set
+	 */
+	public void setIconfarm(Integer iconfarm) {
+		this.iconfarm = iconfarm;
+	}
+
+	/**
+	 * @return the realname
+	 */
+	public HelperStringParameter getRealname() {
+		return realname;
+	}
+
+	/**
+	 * @param realname
+	 *            the realname to set
+	 */
+	public void setRealname(HelperStringParameter realname) {
+		this.realname = realname;
+	}
+
+	/**
+	 * @return the mbox_sha1sum
+	 */
+	public HelperStringParameter getMbox_sha1sum() {
+		return mbox_sha1sum;
+	}
+
+	/**
+	 * @param mbox_sha1sum
+	 *            the mbox_sha1sum to set
+	 */
+	public void setMbox_sha1sum(HelperStringParameter mbox_sha1sum) {
+		this.mbox_sha1sum = mbox_sha1sum;
+	}
+
+	/**
+	 * @return the location
+	 */
+	public HelperStringParameter getLocation() {
+		return location;
+	}
+
+	/**
+	 * @param location
+	 *            the location to set
+	 */
+	public void setLocation(HelperStringParameter location) {
+		this.location = location;
+	}
+
+	/**
+	 * @return the photosurl
+	 */
+	public HelperStringParameter getPhotosurl() {
+		return photosurl;
+	}
+
+	/**
+	 * @param photosurl
+	 *            the photosurl to set
+	 */
+	public void setPhotosurl(HelperStringParameter photosurl) {
+		this.photosurl = photosurl;
+	}
+
+	/**
+	 * @return the profileurl
+	 */
+	public HelperStringParameter getProfileurl() {
+		return profileurl;
+	}
+
+	/**
+	 * @param profileurl
+	 *            the profileurl to set
+	 */
+	public void setProfileurl(HelperStringParameter profileurl) {
+		this.profileurl = profileurl;
+	}
+
+	/**
+	 * @return the photos
+	 */
+	public HelperProfilePhotos getPhotos() {
+		return photos;
+	}
+
+	/**
+	 * @param photos
+	 *            the photos to set
+	 */
+	public void setPhotos(HelperProfilePhotos photos) {
+		this.photos = photos;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "FlickrProfile [id=" + getId() + ", nsid=" + getNsid()
+				+ ", username=" + getUsername() + ", ispro=" + ispro
+				+ ", iconserver=" + iconserver + ", iconfarm=" + iconfarm
+				+ ", realname=" + realname + ", mbox_sha1sum=" + mbox_sha1sum
+				+ ", location=" + location + ", photosurl=" + photosurl
+				+ ", profileurl=" + profileurl + ", photos=" + photos + "]";
 	}
 }
